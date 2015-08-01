@@ -217,7 +217,7 @@ class Compressor(object):
 
     def read_bytes(self, path):
         # skirsdeda/django-pipeline
-        # Change Compressor.read_bytes to open local files found via static fil…
+        # Change Compressor.read_bytes to open local files found via static finders
         # https://github.com/skirsdeda/django-pipeline/commit/edbfb33c04b89036a8491f74e38bae8fe3eb5087
         #file = staticfiles_storage.open(path)
         finder_path = finders.find(path)
