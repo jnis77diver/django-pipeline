@@ -8,6 +8,7 @@ import subprocess
 
 from itertools import takewhile
 
+from django.contrib.staticfiles import finders
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.utils.encoding import smart_bytes, force_text
 from django.utils.six import string_types
@@ -212,8 +213,16 @@ class Compressor(object):
         return relpath(absolute_path, output_path)
 
     def read_bytes(self, path):
-        """Read file content in binary mode"""
-        file = staticfiles_storage.open(path)
+        # skirsdeda/django-pipeline
+        # Change Compressor.read_bytes to open local files found via static fil…
+        # https://github.com/skirsdeda/django-pipeline/commit/edbfb33c04b89036a8491f74e38bae8fe3eb5087
+        #file = staticfiles_storage.open(path)
+        finder_path = finders.find(path)
+        if finder_path is not None:
+            file = open(finder_path)
+        else:
+            raise Exception("File '%s' not found via "
+                            "static files finders", path)
         content = file.read()
         file.close()
         return content
